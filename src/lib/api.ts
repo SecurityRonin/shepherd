@@ -1,4 +1,4 @@
-import type { Task, CreateTask } from "../types/task";
+import type { Task, CreateTask, SessionState } from "../types/task";
 import { getServerPort } from "./tauri";
 
 async function getBaseUrl(): Promise<string> {
@@ -166,6 +166,25 @@ export async function resumeClaudeSession(taskId: number, claudeSessionId: strin
 export async function startFreshSession(taskId: number): Promise<{ status: string }> {
   return request<{ status: string }>(`/api/sessions/${taskId}/fresh`, {
     method: "POST",
+  });
+}
+
+// ── Session Persistence ──────────────────────────────────────────
+
+export async function getInterruptedSessions(): Promise<SessionState[]> {
+  return request<SessionState[]>("/api/sessions/interrupted");
+}
+
+export async function saveSessionState(state: SessionState): Promise<{ saved: boolean }> {
+  return request<{ saved: boolean }>("/api/sessions/state", {
+    method: "POST",
+    body: JSON.stringify(state),
+  });
+}
+
+export async function clearSessionState(taskId: number): Promise<{ cleared: boolean }> {
+  return request<{ cleared: boolean }>(`/api/sessions/${taskId}/state`, {
+    method: "DELETE",
   });
 }
 

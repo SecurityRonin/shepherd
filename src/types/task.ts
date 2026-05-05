@@ -51,3 +51,11 @@ export const AGENT_COLORS: Record<string, AgentInfo> = {
   "gemini-cli": { id: "gemini-cli", label: "Gemini", color: "#2563eb" },
   "aider": { id: "aider", label: "Aider", color: "#dc2626" },
 };
+
+export interface SessionState {
+  task_id: number;
+  session_id: string | null;
+  last_prompt: string;
+  working_dir: string;
+  saved_at: string;
+}
