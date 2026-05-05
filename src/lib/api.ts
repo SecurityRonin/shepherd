@@ -77,6 +77,17 @@ export async function cancelTask(id: number): Promise<{ status: string }> {
   });
 }
 
+// ── Task Summaries ──────────────────────────────────────────────
+
+export interface TaskSummaryResponse {
+  summary: string;
+  generated_at: string;
+}
+
+export async function getTaskSummary(taskId: number): Promise<TaskSummaryResponse> {
+  return request<TaskSummaryResponse>(`/api/tasks/${taskId}/summary`);
+}
+
 // ── Cloud / Auth ─────────────────────────────────────────────────
 
 export interface CloudStatusResponse {
