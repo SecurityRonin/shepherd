@@ -3,6 +3,8 @@ import { useStore } from "../../store";
 import { KanbanColumn } from "./KanbanColumn";
 import { TaskCard } from "./TaskCard";
 import type { Task, TaskStatus } from "../../types/task";
+import { KanbanFilters as KanbanFiltersComponent } from "./KanbanFilters";
+import { filterTasks, EMPTY_FILTERS, type KanbanFilters } from "./filterTasks";
 
 interface ColumnDef {
   status: TaskStatus;
@@ -63,6 +65,8 @@ export const KanbanBoard: React.FC = () => {
   const enterFocus = useStore((s) => s.enterFocus);
 
   const [queuedOrder, setQueuedOrder] = useState<number[] | null>(null);
+  const [filters, setFilters] = useState<KanbanFilters>(EMPTY_FILTERS);
+  const filteredTasks = useMemo(() => filterTasks(tasks, filters), [tasks, filters]);
 
   // Pre-compute permission lookup to avoid O(n*m) filtering per card
   const permissionsByTask = useMemo(() => {
@@ -79,7 +83,7 @@ export const KanbanBoard: React.FC = () => {
   }, [pendingPermissions]);
 
   const grouped = useMemo(() => {
-    const result = groupAndSortTasks(tasks);
+    const result = groupAndSortTasks(filteredTasks);
 
     // Apply custom queued order if set
     if (queuedOrder) {
@@ -100,7 +104,7 @@ export const KanbanBoard: React.FC = () => {
     }
 
     return result;
-  }, [tasks, queuedOrder]);
+  }, [filteredTasks, queuedOrder]);
 
   const handleQueuedReorder = useCallback((newOrder: number[]) => {
     setQueuedOrder(newOrder);
@@ -132,6 +136,7 @@ export const KanbanBoard: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full">
+      <KanbanFiltersComponent filters={filters} onFiltersChange={setFilters} />
       <div className="flex flex-1 gap-3 overflow-x-auto p-4">
         {COLUMNS.map((col) => {
           const columnTasks = grouped[col.status] ?? [];
