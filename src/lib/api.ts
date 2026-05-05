@@ -137,6 +137,15 @@ export async function getBalance(): Promise<CreditBalanceResponse> {
   return request<CreditBalanceResponse>("/api/cloud/balance");
 }
 
+// ── Cloud Sync ──────────────────────────────────────────────────
+
+export async function syncTasksToCloud(tasks: Task[]): Promise<{ synced: number }> {
+  return request<{ synced: number }>("/api/cloud/sync", {
+    method: "POST",
+    body: JSON.stringify({ tasks }),
+  });
+}
+
 // ── Sessions (iTerm2 / Claude Code) ─────────────────────────────
 
 export interface ClaudeSessionsResponse {
