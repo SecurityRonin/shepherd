@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from "react";
-import { useStore } from "../../store";
-import { approveTask } from "../../lib/api";
+import { useStore } from "@/store";
+import { approveTask } from "@/lib/api";
+import { useAsyncAction } from "@/hooks/useAsyncAction";
 import { ErrorDisplay } from "../shared/ErrorDisplay";
 
 interface PermissionPromptProps {
@@ -14,34 +15,15 @@ export const PermissionPrompt: React.FC<PermissionPromptProps> = ({ taskId }) =>
 
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [customText, setCustomText] = useState("");
-  const [isApproving, setIsApproving] = useState(false);
-  const [approveError, setApproveError] = useState<string | null>(null);
 
   const latestPermission = taskPermissions[taskPermissions.length - 1];
 
-  const handleApprove = useCallback(async () => {
-    setIsApproving(true);
-    setApproveError(null);
-    try {
-      await approveTask(taskId);
-    } catch (err) {
-      setApproveError(err instanceof Error ? err.message : "Approval failed");
-    } finally {
-      setIsApproving(false);
-    }
-  }, [taskId]);
+  const approveAction = useAsyncAction(useCallback(() => approveTask(taskId), [taskId]));
+  const isApproving = approveAction.loading;
+  const approveError = approveAction.error;
 
-  const handleApproveAll = useCallback(async () => {
-    setIsApproving(true);
-    setApproveError(null);
-    try {
-      await approveTask(taskId);
-    } catch (err) {
-      setApproveError(err instanceof Error ? err.message : "Approval failed");
-    } finally {
-      setIsApproving(false);
-    }
-  }, [taskId]);
+  const handleApprove = approveAction.execute;
+  const handleApproveAll = approveAction.execute;
 
   const handleCustomSubmit = useCallback(() => {
     if (!customText.trim()) return;
