@@ -7,7 +7,7 @@ vi.mock('../../lib/api', () => ({
   listTasks: vi.fn(),
 }));
 
-import { createTask as apiCreateTask, listTasks as apiListTasks } from '../../lib/api';
+import { createTask as apiCreateTask, listTasks as apiListTasks } from '@/lib/api';
 
 function createTestTasksSlice(): TasksSlice {
   let state: TasksSlice;

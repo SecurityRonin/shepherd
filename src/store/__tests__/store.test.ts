@@ -3,7 +3,7 @@ import { createTasksSlice, type TasksSlice } from '../tasks';
 import { createSessionsSlice, type SessionsSlice } from '../sessions';
 import { createUiSlice, type UiSlice } from '../ui';
 import { createObservabilitySlice, type ObservabilitySlice } from '../observability';
-import type { TaskEvent, PermissionEvent, MetricsUpdateEvent, BudgetAlertEvent, GateResultEvent } from '../../types/events';
+import type { TaskEvent, PermissionEvent, MetricsUpdateEvent, BudgetAlertEvent, GateResultEvent } from '@/types/events';
 
 // Helper to create a standalone slice for testing
 function createTestTasksSlice(): TasksSlice {

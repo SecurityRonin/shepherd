@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { checkTriggers, dismissTrigger } from '../../lib/api';
-import type { TriggerSuggestion } from '../../lib/api';
+import { checkTriggers, dismissTrigger } from '@/lib/api';
+import type { TriggerSuggestion } from '@/lib/api';
 
 interface TriggerToastProps {
   projectDir: string;
