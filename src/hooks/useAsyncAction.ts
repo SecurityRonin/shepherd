@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { formatError } from "../lib/formatError";
 
 interface AsyncActionState<T> {
   loading: boolean;
@@ -29,7 +30,7 @@ export function useAsyncAction<T, A extends unknown[] = unknown[]>(
       } catch (err) {
         setState({
           loading: false,
-          error: err instanceof Error ? err.message : "Unknown error",
+          error: formatError(err),
           data: null,
         });
       }
